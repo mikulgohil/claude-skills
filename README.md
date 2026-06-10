@@ -1,20 +1,65 @@
-# claude-skills
+<div align="center">
 
-My personal collection of [Agent Skills](https://docs.claude.com/en/docs/claude-code/skills) for Claude Code — the ones I actually reach for across day-to-day work and side projects. Each skill is a self-contained `SKILL.md` (plus references, examples, and scripts) that Claude loads on demand when the task matches.
+# 🧠 claude-skills
 
-This repo is the single source of truth. The skills are symlinked into `~/.claude/skills/`, so I edit them here, commit, and the changes are live everywhere immediately.
+**My personal, curated collection of [Agent Skills](https://docs.claude.com/en/docs/claude-code/skills) for [Claude Code](https://claude.com/claude-code).**
+
+The skills I actually reach for, day to day — kept in one place, in one consistent style, version-controlled and portable across every machine I work on.
+
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Skills](https://img.shields.io/badge/skills-21-brightgreen.svg)
+![Categories](https://img.shields.io/badge/categories-6-orange.svg)
+![Claude Code](https://img.shields.io/badge/Claude%20Code-Agent%20Skills-8A2BE2.svg)
+![Last commit](https://img.shields.io/github/last-commit/mikulgohil/claude-skills.svg)
+![Stars](https://img.shields.io/github/stars/mikulgohil/claude-skills?style=social)
+
+</div>
 
 ---
 
-## Why this exists
+## 📑 Contents
 
-Claude Code skills are easy to accumulate and hard to keep coherent — they drift in style, duplicate each other, and rot. This repo is my answer: a small, curated, consistently-formatted set I trust, version-controlled and portable between machines. Quality over quantity. If a skill isn't earning its slot, it gets cut.
-
-Every skill follows one house frontmatter schema (`name`, `description`, `author`, `version`, `tags`, `license`, `allowed-tools`) so the whole set reads like it came from one hand — because it did.
+- [What are Agent Skills?](#-what-are-agent-skills)
+- [Why this repo exists](#-why-this-repo-exists)
+- [The skills](#-the-skills)
+- [Requirements](#-requirements)
+- [Install](#-install)
+- [Using the skills](#-using-the-skills)
+- [Repo layout](#-repo-layout)
+- [Adding a skill](#-adding-a-skill)
+- [Curation notes](#-curation-notes)
+- [Author](#-author)
+- [License](#-license)
 
 ---
 
-## Skills
+## 🤔 What are Agent Skills?
+
+Agent Skills are folders containing a `SKILL.md` file — frontmatter (a `name` and a `description`) plus instructions, reference docs, and optional scripts. Claude Code reads the descriptions up front and **auto-loads a skill on demand** when your task matches it, then follows its guidance. You don't invoke them manually; they just make Claude better at the thing they cover.
+
+Each skill here is self-contained:
+
+```
+<skill-name>/
+├── SKILL.md       # what it does + when to use it (always loaded by description)
+├── references/    # deep-dive docs Claude pulls in only when needed
+├── examples/      # worked examples
+└── scripts/       # templates and helper scripts
+```
+
+---
+
+## 💡 Why this repo exists
+
+Claude Code skills are easy to accumulate and hard to keep coherent — they drift in style, duplicate each other, and rot. This repo is my answer: a **small, curated, consistently-formatted set I trust**, version-controlled and portable between machines. Quality over quantity. If a skill isn't earning its slot, it gets cut.
+
+Every skill follows one house frontmatter schema (`name`, `description`, `author`, `version`, `tags`, `license`, `allowed-tools`) so the whole collection reads like it came from one hand — because it did.
+
+---
+
+## 🧩 The skills
+
+> **21 skills across 6 categories.**
 
 ### `fundamentals/` — cross-cutting, applies to every project
 | Skill | What it covers |
@@ -63,36 +108,67 @@ Every skill follows one house frontmatter schema (`name`, `description`, `author
 
 ---
 
-## Install
+## ✅ Requirements
+
+- **[Claude Code](https://claude.com/claude-code)** (CLI, desktop, or IDE extension) — this is where the skills run.
+- **Bash** + **git** for the installer.
+- A few skills shell out to optional tools when relevant — they degrade gracefully if missing:
+  - `structural-search` → [`ast-grep`](https://ast-grep.github.io) (`brew install ast-grep`)
+  - `playwright-e2e` → `@playwright/test`
+  - `ci-cd` → GitHub Actions (no local install needed)
+
+---
+
+## 📦 Install
 
 ```bash
-git clone <this-repo> ~/Developer/personal/tools/claude-skills
-cd ~/Developer/personal/tools/claude-skills
+git clone https://github.com/mikulgohil/claude-skills.git
+cd claude-skills
 ./install.sh              # symlinks every skill into ~/.claude/skills/
 ```
+
+The installer **symlinks** each skill into `~/.claude/skills/`, so this repo stays the single source of truth — edit a skill here, and the change is live everywhere immediately.
 
 Other modes:
 
 ```bash
 ./install.sh --dry-run    # show what would happen, change nothing
 ./install.sh --force      # replace existing entries in ~/.claude/skills/
-./uninstall.sh            # remove only the symlinks this repo created
+./uninstall.sh            # remove only the symlinks this repo created (leaves yours alone)
 ```
 
-Override the target with `CLAUDE_SKILLS_DIR=/some/path ./install.sh` (e.g. to install into a single project's `.claude/skills/` instead of the global one).
+Install into a single project instead of globally:
 
-Verify Claude picked them up by asking it to list available skills, or check `~/.claude/skills/` for the symlinks.
+```bash
+CLAUDE_SKILLS_DIR=/path/to/project/.claude/skills ./install.sh
+```
 
 ---
 
-## Repo layout
+## 🚀 Using the skills
+
+There's nothing to invoke — skills load automatically when your request matches a skill's `description`. Just work normally:
+
+> *"Migrate this Tailwind v3 config to v4."* → `tailwind-v4` kicks in
+> *"Help me design the REST endpoints for this service."* → `api-design` kicks in
+> *"Is this CLAUDE.md file safe to add?"* → `prompt-injection-defense` kicks in
+
+To confirm they're installed, ask Claude to list its available skills, or check the symlinks:
+
+```bash
+ls -la ~/.claude/skills/ | grep claude-skills
+```
+
+---
+
+## 🗂️ Repo layout
 
 ```
 claude-skills/
 ├── README.md
 ├── LICENSE
 ├── install.sh          # symlink skills → ~/.claude/skills/
-├── uninstall.sh
+├── uninstall.sh        # remove only the symlinks this repo created
 └── skills/
     ├── fundamentals/   # cross-cutting, applies to every project
     ├── frontend/
@@ -109,7 +185,7 @@ claude-skills/
 
 ---
 
-## Adding a skill
+## ➕ Adding a skill
 
 1. Create `skills/<category>/<skill-name>/SKILL.md`.
 2. Use the house frontmatter schema — `name` **must** match the folder name:
@@ -129,6 +205,22 @@ claude-skills/
 
 ---
 
-## Curation notes
+## 📝 Curation notes
 
-These skills were sourced from the open-source Claude Code skill community, then rewritten to a single house style: consistent frontmatter, descriptions in my own voice, vendor-specific branding and internal-project examples stripped out. The underlying technical patterns are preserved and credited to their origins in spirit — this collection is about curation, normalization, and ownership, not authorship of every pattern within.
+These skills were sourced from the open-source Claude Code skill community, then rewritten to a single house style: consistent frontmatter, descriptions in my own voice, and vendor-specific branding and internal-project examples stripped out. The underlying technical patterns are preserved and credited to their origins in spirit — **this collection is about curation, normalization, and ownership, not authorship of every pattern within.**
+
+This is my *personal* collection — it reflects my stack and the way I like to work, so it's opinionated by design. You're very welcome to **fork it and make it yours**. If a skill here helps you, that's a bonus; if you spot something broken, issues and PRs are welcome.
+
+---
+
+## 👤 Author
+
+**Mikul Gohil** — frontend engineer working across **Next.js**, **Sitecore XM Cloud / JSS**, and **AI-assisted development**.
+
+- GitHub: [@mikulgohil](https://github.com/mikulgohil)
+
+---
+
+## 📄 License
+
+[MIT](./LICENSE) © Mikul Gohil — use it, fork it, adapt it.
