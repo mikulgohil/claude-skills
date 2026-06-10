@@ -16,6 +16,16 @@ Every skill follows one house frontmatter schema (`name`, `description`, `author
 
 ## Skills
 
+### `fundamentals/` — cross-cutting, applies to every project
+| Skill | What it covers |
+|---|---|
+| **typescript-patterns** | Generics, conditional/utility types, strict mode, discriminated unions, type guards, Zod/Valibot |
+| **api-design** | REST/GraphQL design, versioning, pagination, OpenAPI, RFC 9457 problem-details errors |
+| **accessibility** | WCAG 2.2, keyboard/focus management, semantic HTML, ARIA, React Aria patterns |
+| **security-patterns** | Auth, defense-in-depth, input validation, OWASP Top 10, secrets, PII masking, LLM safety |
+| **database-patterns** | SQL/NoSQL schema modeling, normalization, indexing, versioned migrations |
+| **debugging** | Systematic methodology + language debuggers + scenario playbooks (leaks, races, deadlocks) |
+
 ### `frontend/` — web stack
 | Skill | What it covers |
 |---|---|
@@ -35,12 +45,15 @@ Every skill follows one house frontmatter schema (`name`, `description`, `author
 | **rag-retrieval** | Embeddings, chunking, hybrid search, contextual retrieval, HyDE, reranking, agentic RAG, pgvector |
 | **context-engineering** | Structuring and optimizing an agent's context window when writing commands / skills / sub-agents |
 | **multi-agent-patterns** | Decomposition, specialization, and orchestration for multi-agent architectures |
+| **prompt-injection-defense** | Hidden-Unicode/Trojan-Source injection, homoglyphs, sanitizing untrusted content before it enters context |
 
 ### `devex/` — engineering workflow
 | Skill | What it covers |
 |---|---|
 | **adr-writer** | Architecture Decision Records in the Nygard format — context, decision, consequences, alternatives |
 | **playwright-e2e** | Playwright (CLI) — page objects, visual regression, axe-core a11y, CI integration |
+| **ci-cd** | GitHub Actions pipelines — build/test/deploy, caching, matrix builds, release automation |
+| **structural-search** | `ast-grep` semantic code search & rewrite — precise codebase-wide refactors |
 
 ### `personal/` — everything else
 | Skill | What it covers |
@@ -81,6 +94,7 @@ claude-skills/
 ├── install.sh          # symlink skills → ~/.claude/skills/
 ├── uninstall.sh
 └── skills/
+    ├── fundamentals/   # cross-cutting, applies to every project
     ├── frontend/
     ├── sitecore/
     ├── ai-agents/
